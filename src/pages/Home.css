@@ -291,3 +291,50 @@
     font-size: 1rem;
   }
 }
+.add-task-btn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.2s;
+}
+
+.add-task-btn:hover {
+  background-color: #0056b3;
+}
+  .home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.add-task-button {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  background-color: #4caf50 !important;
+  color: white !important;
+  padding: 12px 20px !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  font-weight: bold !important;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.2) !important;
+  position: fixed !important;  /* fixed yap */
+  top: 80px !important;        /* navbar yüksekliğine göre ayarla */
+  right: 20px !important;      /* sayfa sağ üstüne yerleştir */
+  z-index: 3001 !important;    /* navbar'dan büyük değer */
+  width: auto !important;
+  height: auto !important;
+}
+
+
+
+.add-task-button:hover {
+  background-color: #45a049;
+}
+

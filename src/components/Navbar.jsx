@@ -57,7 +57,7 @@ export default function Navbar() {
             {/* Admin linkleri */}
             {isAdmin && (
               <>
-                <Link className="navbar-button btn-task-add" to="/task-add">Görev Ekle</Link>
+
                 <Link className="navbar-button btn-employee-add" to="/employee-add">Çalışan Yönetimi</Link>
                 <Link className="navbar-button btn-efforts-list" to="/efforts-list">Efor Yönetimi</Link>
                 <Link className="navbar-button btn-customer-requests" to="/customer-requests">Müşteri Talepleri</Link>
@@ -67,7 +67,7 @@ export default function Navbar() {
             {/* TeamLead linkleri */}
             {isTeamLead && (
               <>
-                <Link className="navbar-button btn-task-add" to="/task-add">Görev Ekle</Link>
+
                 <Link className="navbar-button btn-efforts-list" to="/efforts-list">Çalışan Eforları</Link>
                 <Link className="navbar-button btn-effort-add" to="/effort-add">Efor Ekle</Link>
               </>
