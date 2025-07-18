@@ -1,0 +1,261 @@
+/* ====== Modern Navbar ====== */
+.navbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  border-radius: 0;
+  margin: 0;
+  box-shadow: var(--shadow);
+  border: none;
+  background: #fff;
+  backdrop-filter: blur(12px);
+  padding: 1rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-main);
+  min-height: 64px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.dark-mode .navbar {
+  background: #181818;
+}
+
+.navbar-logo {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 1.2px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
+}
+
+.user-welcome {
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0 24px 0 10px;
+  font-size: 0.92rem;
+  color: var(--primary);
+  font-weight: 600;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.welcome-text {
+  color: var(--dark);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.user-name {
+  color: var(--primary);
+  font-size: 1.03rem;
+  font-weight: 700;
+  margin-left: 4px;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 1.32rem;
+}
+
+/* ====== Ortak Buton Stili ====== */
+.navbar-button {
+  border-radius: 20px;
+  padding: 7px 12px;
+  font-weight: 600;
+  font-size: 0.82rem;
+  border: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+  user-select: none;
+  color: #222;
+}
+
+/* ====== Renk Bazlı Butonlar ====== */
+
+/* Home */
+.btn-home {
+  background: linear-gradient(90deg, #1976d2, #64b5f6);
+  color: var(--white);
+  box-shadow: 0 4px 15px rgba(25, 118, 210, 0.10);
+}
+.btn-home:hover {
+  background: linear-gradient(90deg, #64b5f6, #1976d2);
+  transform: translateY(-2px) scale(1.04);
+}
+
+/* Task Add */
+.btn-task-add {
+  background: linear-gradient(90deg, #43a047, #a5d6a7);
+  color: var(--white);
+  box-shadow: 0 4px 15px rgba(67, 160, 71, 0.10);
+}
+.btn-task-add:hover {
+  background: linear-gradient(90deg, #a5d6a7, #43a047);
+  transform: translateY(-2px) scale(1.04);
+}
+
+/* Employee Add */
+.btn-employee-add {
+  background: linear-gradient(90deg, #8e24aa, #ce93d8);
+  color: var(--white);
+  box-shadow: 0 4px 15px rgba(142, 36, 170, 0.10);
+}
+.btn-employee-add:hover {
+  background: linear-gradient(90deg, #ce93d8, #8e24aa);
+  transform: translateY(-2px) scale(1.04);
+}
+
+/* Efforts List */
+.btn-efforts-list {
+  background: linear-gradient(90deg, #ff9800, #ffe0b2);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(255, 152, 0, 0.10);
+}
+.btn-efforts-list:hover {
+  background: linear-gradient(90deg, #ffe0b2, #ff9800);
+  transform: translateY(-2px) scale(1.04);
+}
+
+/* Effort Add */
+.btn-effort-add {
+  background: linear-gradient(90deg, #8e24aa, #ce93d8);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(142, 36, 170, 0.10);
+}
+.btn-effort-add:hover {
+  background: linear-gradient(90deg, #ce93d8, #8e24aa);
+  transform: translateY(-2px) scale(1.04);
+}
+
+/* Customer Requests */
+.btn-customer-requests {
+  background: linear-gradient(90deg, #ff7043, #ffccbc);
+  color: var(--white);
+  box-shadow: 0 4px 15px rgba(255, 112, 67, 0.15);
+}
+.btn-customer-requests:hover {
+  background: linear-gradient(90deg, #ffccbc, #ff7043);
+  transform: translateY(-2px) scale(1.04);
+}
+
+/* My Tasks */
+.btn-my-tasks {
+  background: linear-gradient(90deg, #fffde7, #fff176);
+  color: #bfa600;
+  box-shadow: 0 4px 15px rgba(255, 241, 118, 0.10);
+}
+.btn-my-tasks:hover {
+  background: linear-gradient(90deg, #fff176, #fffde7);
+  transform: translateY(-2px) scale(1.04);
+}
+
+/* Logout Button */
+.navbar-logout-btn {
+  background: #ff5252;
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 7px 12px;
+  font-weight: 600;
+  font-size: 0.82rem;
+  border: none;
+  margin-left: 10px;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(255, 82, 82, 0.15);
+  cursor: pointer;
+  user-select: none;
+}
+.navbar-logout-btn:hover {
+  background: #d32f2f;
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(255, 82, 82, 0.22);
+}
+
+/* ====== Responsive ====== */
+@media (max-width: 900px) {
+  .navbar {
+    padding: 1rem 0.5rem;
+  }
+  .navbar-links {
+    gap: 0.7rem;
+  }
+  .navbar-logo {
+    font-size: 1.3rem;
+  }
+}
+@media (max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.7rem 0.2rem;
+  }
+  .navbar-links {
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+  .navbar-logo {
+    font-size: 1.1rem;
+  }
+}
+
+.darkmode-toggle {
+  display: inline-block;
+  position: relative;
+  width: 48px;
+  height: 28px;
+  margin: 0 12px 0 0;
+  vertical-align: middle;
+}
+.darkmode-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.darkmode-toggle .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #e0e0e0;
+  border-radius: 28px;
+  transition: background 0.3s;
+  box-shadow: 0 2px 8px rgba(108, 71, 255, 0.08);
+}
+.darkmode-toggle .slider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  bottom: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.3s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.10);
+}
+.darkmode-toggle input:checked + .slider {
+  background: linear-gradient(90deg, #6c47ff, #a084ff);
+}
+.darkmode-toggle input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
