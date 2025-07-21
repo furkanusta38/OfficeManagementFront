@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function TaskDetail({ id, onClose }) {
+export default function TaskDetail({ id, onClose, onDelete }) {
   const [task, setTask] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
@@ -73,6 +73,26 @@ export default function TaskDetail({ id, onClose }) {
     }
   };
 
+  const handleDelete = async () => {
+    const confirmed = window.confirm("Bu görevi silmek istediğinize emin misiniz?");
+    if (!confirmed) return;
+
+    try {
+      await axios.delete(`https://localhost:7084/api/TaskItem/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      alert("Görev başarıyla silindi.");
+      onClose();
+      if (onDelete) onDelete(); // görevleri yenile
+    } catch (error) {
+      console.error("Görev silinemedi:", error);
+      alert("Bir hata oluştu, görev silinemedi.");
+    }
+  };
+
   if (!task) {
     return (
       <div className="modal-overlay">
@@ -138,6 +158,19 @@ export default function TaskDetail({ id, onClose }) {
           <button onClick={handleAddComment} disabled={!newComment.trim()}>
             Yorum Ekle
           </button>
+
+          {user.role === "admin" || user.role === "teamlead" && (
+            <button
+              onClick={handleDelete}
+              style={{
+                backgroundColor: "#f44336",
+                marginTop: "20px",
+                display: "block",
+              }}
+            >
+              Görevi Sil
+            </button>
+          )}
         </div>
       </div>
 

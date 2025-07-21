@@ -37,7 +37,7 @@ export default function CustomerRequests() {
   return (
     <div className="home-container customer-requests-page">
       <div className="table-container">
-        <h2 className="table-title">Müşteri Talepleri</h2>
+        <h2 className="table-title"><span role="img" aria-label="Talepler" style={{marginRight: 8}}>📬</span>Müşteri Talepleri</h2>
 
         {requests.length === 0 ? (
           <p className="empty-message">Hiç talep bulunamadı.</p>
@@ -48,6 +48,8 @@ export default function CustomerRequests() {
             keyExpr="requestId" 
             pageSize={10}
             autoHideColumns={true}
+            width="100%"
+            height={600}
           />
         )}
       </div>

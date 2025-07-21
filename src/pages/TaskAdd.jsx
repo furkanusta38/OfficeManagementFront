@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-export default function TaskAdd() {
+export default function TaskAdd({ onClose }) {
   const [formData, setFormData] = useState({
     taskTitle: "",
     taskDescription: "",
@@ -65,6 +65,7 @@ export default function TaskAdd() {
         assignedToUserId: "",
         forWho: "", // sıfırla
       });
+      if (onClose) onClose(); // Modalı kapat
     } catch (err) {
       console.error("Görev eklenemedi:", err);
       alert("Hata oluştu. Bilgileri kontrol edin.");
@@ -74,6 +75,7 @@ export default function TaskAdd() {
   return (
     <div className="page-container">
       <div className="content-container">
+        <button className="close-button" onClick={onClose} style={{ float: 'right', marginBottom: 10 }}>X</button>
         <h2 className="page-title">📝 Görev Ekle</h2>
 
         <form onSubmit={handleSubmit} className="modern-form">

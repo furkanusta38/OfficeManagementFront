@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import TaskDetail from "./TaskDetail"; // Yolunu projenin yapısına göre ayarla
+import TaskDetail from "./TaskDetail";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 import "./Home.css";
-
+import TaskAdd from "./TaskAdd";
 
 export default function Home() {
   const [tasks, setTasks] = useState([]);
   const [selectedTaskId, setSelectedTaskId] = useState(null);
   const navigate = useNavigate();
+  const [showTaskAddModal, setShowTaskAddModal] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const isAdmin = user?.role === "admin"; // Admin kontrolü
+  const isAdmin = user?.role === "admin";
+  const isTeamLead = user?.role === "teamlead";
 
-  console.log("Kullanıcı rolü:", user?.role);
-  console.log("isAdmin:", isAdmin);
-
-  // Görevleri çek
   const fetchTasks = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -35,7 +33,6 @@ export default function Home() {
     fetchTasks();
   }, []);
 
-  // Görev durumunu güncelle
   const handleStatusChange = async (taskId, newStatus) => {
     try {
       const token = localStorage.getItem("token");
@@ -49,24 +46,23 @@ export default function Home() {
     }
   };
 
-  // Modal açma
   const openModalWithTask = (taskId) => setSelectedTaskId(taskId);
-
-  // Modal kapatma
   const closeModal = () => setSelectedTaskId(null);
 
-  // Sütunlar ve durumları
   const columns = [
-    { id: "4", title: "⚪ Backlog", status: 4 },      // En başa alındı
-    { id: "0", title: "🟡 Bekleyen", status: 0 },
-    { id: "1", title: "🟠 Devam Ediyor", status: 1 },
-    { id: "2", title: "🟢 Tamamlanan", status: 2 },
+    { id: "4", title: "⚪ Backlog", status: 4, color: "#b0b0b0" },
+    { id: "0", title: "🟡 To Do", status: 0, color: "#facc15" },
+    { id: "1", title: "🟠  In Progress", status: 1, color: "#fb923c" },
+    { id: "2", title: "🟢 Done", status: 2, color: "#22c55e" },
   ];
 
-  // Duruma göre görevleri filtrele
   const getTasksByStatus = (status) => tasks.filter((t) => t.status === status);
 
-  // Drag & drop sonrası işlem
+  const backlogCount = tasks.filter(t => t.status === 4).length;
+  const waitingCount = tasks.filter(t => t.status === 0).length;
+  const inProgressCount = tasks.filter(t => t.status === 1).length;
+  const completedCount = tasks.filter(t => t.status === 2).length;
+
   const onDragEnd = (result) => {
     const { source, destination, draggableId } = result;
     if (!destination || source.droppableId === destination.droppableId) return;
@@ -82,17 +78,28 @@ export default function Home() {
     handleStatusChange(draggableId, newStatus);
   };
 
-  // Butonun tıklama fonksiyonu
   const handleAddTask = () => {
-    // Görev ekleme sayfasına yönlendir
-    navigate("/task-add");
+    setShowTaskAddModal(true);
+  };
+
+  const handleCloseTaskAddModal = () => {
+    setShowTaskAddModal(false);
+    fetchTasks();
   };
 
   return (
     <div className="home-container">
       <div className="home-header">
-        <h2 className="table-title">📋 Görev Panosu</h2>
+        <h2 className="table-title">📋 LivaBoard </h2>
       </div>
+
+      {(isAdmin || isTeamLead) && (
+        <div className="add-task-btn-wrapper">
+          <button className="add-task-button" onClick={handleAddTask}>
+            ➕ Yeni Görev Ekle
+          </button>
+        </div>
+      )}
 
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="kanban-board">
@@ -106,27 +113,40 @@ export default function Home() {
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                 >
-                  <h3 className="kanban-column-title">{col.title}</h3>
+                  <h3 className="kanban-column-title">
+                    <span>{col.title}</span>
+                    <span className="column-count-badge" style={{ background: col.color }}>
+                      {getTasksByStatus(col.status).length}
+                    </span>
+                  </h3>
 
                   {getTasksByStatus(col.status).map((task, idx) => (
                     <Draggable key={task.taskId} draggableId={String(task.taskId)} index={idx}>
                       {(provided, snapshot) => (
                         <div
                           className={
-                            "kanban-card" + (snapshot.isDragging ? " dragging" : "")
+                            "modern-kanban-card" + (snapshot.isDragging ? " dragging" : "")
                           }
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                         >
-                          <div className="kanban-card-title">{task.taskTitle}</div>
-                          <div className="kanban-card-desc">{task.taskDescription}</div>
-                          <div className="kanban-card-meta">
+                          <div className="modern-card-header">
+                            <span className="modern-card-avatar">{task.assignedToUserFullName ? task.assignedToUserFullName[0] : "?"}</span>
+                            <span className="modern-card-title">{task.taskTitle}</span>
+                            <span className={
+                              "modern-card-status status-" + task.status
+                            }>
+                              {col.title.replace(/^[^ ]+ /, "")}
+                            </span>
+                          </div>
+                          <div className="modern-card-desc">{task.taskDescription}</div>
+                          <div className="modern-card-meta">
                             <span>⏳ {task.taskDurationHours} saat</span>
                             <span>👤 {task.assignedToUserFullName}</span>
                           </div>
                           <button
-                            className="detail-button"
+                            className="modern-detail-btn"
                             onClick={() => openModalWithTask(task.taskId)}
                           >
                             Detaya Git
@@ -144,24 +164,26 @@ export default function Home() {
         </div>
       </DragDropContext>
 
-      {/* Modal Görev Detayı */}
       {selectedTaskId && (
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <button className="close-button" onClick={closeModal}>
               X
             </button>
-            <TaskDetail id={selectedTaskId} onClose={closeModal} />
+            <TaskDetail id={selectedTaskId} onClose={closeModal} onDelete={fetchTasks} />
           </div>
         </div>
       )}
 
-      {/* Portal ile butonu body'ye ekle */}
-      {createPortal(
-        <button className="add-task-button" onClick={handleAddTask}>
-          ➕ Yeni Görev Ekle
-        </button>,
-        document.body
+      {showTaskAddModal && (
+        <div className="modal-overlay" onClick={handleCloseTaskAddModal}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <button className="close-button" onClick={handleCloseTaskAddModal}>
+              X
+            </button>
+            <TaskAdd onClose={handleCloseTaskAddModal} />
+          </div>
+        </div>
       )}
     </div>
   );

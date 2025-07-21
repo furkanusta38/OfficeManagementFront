@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import TaskDetail from "./TaskDetail";
 
 export default function MyTasks() {
   const [tasks, setTasks] = useState([]);
+  const [selectedTaskId, setSelectedTaskId] = useState(null);
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -30,8 +30,11 @@ export default function MyTasks() {
     }
   }, [token, user]);
 
-  const goToDetail = (taskId) => {
-    navigate(`/task/${taskId}`);
+  const openDetailModal = (taskId) => {
+    setSelectedTaskId(taskId);
+  };
+  const closeDetailModal = () => {
+    setSelectedTaskId(null);
   };
 
   return (
@@ -55,7 +58,7 @@ export default function MyTasks() {
                   <th>Başlangıç</th>
                   <th>Beklenen Bitiş</th>
                   <th>Süre (saat)</th>
-                  <th>Detay</th> {/* Yeni sütun */}
+                  <th>Detay</th>
                 </tr>
               </thead>
               <tbody>
@@ -67,7 +70,7 @@ export default function MyTasks() {
                     <td>{new Date(task.taskEndDate).toLocaleDateString()}</td>
                     <td>{task.taskDurationHours}</td>
                     <td>
-                      <button className="detail-table-btn" onClick={() => goToDetail(task.taskId)}>
+                      <button className="detail-table-btn" onClick={() => openDetailModal(task.taskId)}>
                         Detaya Git
                       </button>
                     </td>
@@ -78,6 +81,9 @@ export default function MyTasks() {
           </div>
         )}
       </div>
+      {selectedTaskId && (
+        <TaskDetail id={selectedTaskId} onClose={closeDetailModal} />
+      )}
     </div>
   );
 }

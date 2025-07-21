@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import './navbar.css';
+import logo from "../assets/livaboardlogo.jpg";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -10,6 +11,8 @@ export default function Navbar() {
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("darkMode") === "true"
   );
+
+  const [showUserTooltip, setShowUserTooltip] = useState(false);
 
   useEffect(() => {
     if (darkMode) {
@@ -46,44 +49,34 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="navbar">
-      <div className="navbar-logo">DataLiva Ofis Yönetim</div>
-
-      <div className="navbar-links">
+    <nav className="navbar-simple">
+      <div className="navbar-logo" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <img src={logo} alt="Logo" height={60} style={{ marginRight: 12 }} />
+        Ofis Yönetimi 
+      </div>
+      <div className="navbar-links-simple">
         {token ? (
           <>
-            <Link className="navbar-button btn-home" to="/home">Ana Sayfa</Link>
-
-            {/* Admin linkleri */}
+            <Link className="nav-link-simple" to="/home">Ana Sayfa</Link>
             {isAdmin && (
               <>
-
-                <Link className="navbar-button btn-employee-add" to="/employee-add">Çalışan Yönetimi</Link>
-                <Link className="navbar-button btn-efforts-list" to="/efforts-list">Efor Yönetimi</Link>
-                <Link className="navbar-button btn-customer-requests" to="/customer-requests">Müşteri Talepleri</Link>
+                <Link className="nav-link-simple" to="/employee-add">Çalışan Yönetimi</Link>
+                <Link className="nav-link-simple" to="/efforts-list">Efor Yönetimi</Link>
+                <Link className="nav-link-simple" to="/customer-requests">Müşteri Talepleri</Link>
               </>
             )}
-
-            {/* TeamLead linkleri */}
             {isTeamLead && (
               <>
-
-                <Link className="navbar-button btn-efforts-list" to="/efforts-list">Çalışan Eforları</Link>
-                <Link className="navbar-button btn-effort-add" to="/effort-add">Efor Ekle</Link>
-              </>
-            )}  
-
-            {/* Normal kullanıcı (user) linkleri */}
-            {isNormalUser && (
-              <>
-                <Link className="navbar-button btn-my-tasks" to="/my-tasks">Görevlerim</Link>
-                <Link className="navbar-button btn-effort-add" to="/effort-add">Efor Ekle</Link>
+                <Link className="nav-link-simple" to="/efforts-list">Çalışan Eforları</Link>
+                <Link className="nav-link-simple" to="/effort-add">Efor Ekle</Link>
               </>
             )}
-
-            {/* Customer rolü navbar göstermez */}
-
-            {/* Dark mode toggle */}
+            {isNormalUser && (
+              <>
+                <Link className="nav-link-simple" to="/my-tasks">Görevlerim</Link>
+                <Link className="nav-link-simple" to="/effort-add">Efor Ekle</Link>
+              </>
+            )}
             <label className="darkmode-toggle" title="Karanlık Mod">
               <input
                 type="checkbox"
@@ -91,9 +84,23 @@ export default function Navbar() {
                 onChange={() => setDarkMode((dm) => !dm)}
                 aria-label="Karanlık Mod"
               />
-              <span className="slider" />
+              <span className="slider">
+                <span className="icon" style={{
+                  position: 'absolute',
+                  top: 3,
+                  left: darkMode ? 3 : 25,
+                  width: 18,
+                  height: 18,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: 16,
+                  color: '#fff',
+                  transition: 'left 0.3s',
+                  pointerEvents: 'none',
+                }}>{darkMode ? '🌙' : '☀️'}</span>
+              </span>
             </label>
-
             <button
               className="navbar-logout-btn"
               onClick={handleLogout}
@@ -104,14 +111,28 @@ export default function Navbar() {
             </button>
           </>
         ) : (
-          <Link className="navbar-button btn-home" to="/">Giriş</Link>
+          <Link className="nav-link-simple" to="/">Giriş</Link>
         )}
       </div>
-
       {user && (
         <div className="user-welcome">
           <span className="welcome-text">Hoşgeldin</span>
-          <span className="user-name">{user.userFullName}</span>
+          <span
+            className="user-name user-tooltip-trigger"
+            onMouseEnter={() => setShowUserTooltip(true)}
+            onMouseLeave={() => setShowUserTooltip(false)}
+            style={{ position: 'relative', cursor: 'pointer' }}
+          >
+            {user.userFullName}
+            {showUserTooltip && (
+              <div className="user-tooltip">
+                <div><b>Ad Soyad:</b> {user.userFullName}</div>
+                {user.email && <div><b>E-posta:</b> {user.email}</div>}
+                {user.department && <div><b>Departman:</b> {user.department}</div>}
+                {user.role && <div><b>Rol:</b> {user.role}</div>}
+              </div>
+            )}
+          </span>
           {user.department && (
             <div style={{ fontSize: '0.92rem', color: '#888', marginTop: 2, marginLeft: 4 }}>
               {user.department}

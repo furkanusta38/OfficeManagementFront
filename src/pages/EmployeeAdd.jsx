@@ -97,7 +97,7 @@ export default function EmployeeAdd() {
           </DataGrid>
         </div>
 
-        <h3 style={{ color: "white", marginBottom: "20px", fontSize: "1.5rem" }}>
+        <h3 style={{ color: "#7c3aed", marginBottom: "20px", fontSize: "1.5rem" }}>
           ➕ Yeni Çalışan Ekle
         </h3>
 
@@ -170,6 +170,7 @@ export default function EmployeeAdd() {
               <option value="User">User</option>
               <option value="Admin">Admin</option>
               <option value="Customer">Customer</option>
+              <option value="TeamLead">TeamLead</option>
             </select>
           </div>
 
