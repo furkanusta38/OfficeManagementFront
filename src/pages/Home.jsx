@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import TaskDetail from "./TaskDetail";
+import TaskDetail from "./TaskDetail"; // Yolunu projenin yapısına göre ayarla
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 import "./Home.css";
 import TaskAdd from "./TaskAdd";
+
 
 export default function Home() {
   const [tasks, setTasks] = useState([]);
@@ -17,6 +18,7 @@ export default function Home() {
   const isAdmin = user?.role === "admin";
   const isTeamLead = user?.role === "teamlead";
 
+  // Görevleri çek
   const fetchTasks = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -33,6 +35,7 @@ export default function Home() {
     fetchTasks();
   }, []);
 
+  // Görev durumunu güncelle
   const handleStatusChange = async (taskId, newStatus) => {
     try {
       const token = localStorage.getItem("token");
@@ -46,23 +49,30 @@ export default function Home() {
     }
   };
 
+  // Modal açma
   const openModalWithTask = (taskId) => setSelectedTaskId(taskId);
+
+  // Modal kapatma
   const closeModal = () => setSelectedTaskId(null);
 
+
   const columns = [
-    { id: "4", title: "⚪ Backlog", status: 4, color: "#b0b0b0" },
+    { id: "4", title: "⚪ Backlog", status: 4, color: "#b0b0b0" },   
     { id: "0", title: "🟡 To Do", status: 0, color: "#facc15" },
     { id: "1", title: "🟠  In Progress", status: 1, color: "#fb923c" },
     { id: "2", title: "🟢 Done", status: 2, color: "#22c55e" },
   ];
 
+
   const getTasksByStatus = (status) => tasks.filter((t) => t.status === status);
 
+  // İstatistikler
   const backlogCount = tasks.filter(t => t.status === 4).length;
   const waitingCount = tasks.filter(t => t.status === 0).length;
   const inProgressCount = tasks.filter(t => t.status === 1).length;
   const completedCount = tasks.filter(t => t.status === 2).length;
 
+  // Drag & drop sonrası işlem
   const onDragEnd = (result) => {
     const { source, destination, draggableId } = result;
     if (!destination || source.droppableId === destination.droppableId) return;
@@ -78,13 +88,14 @@ export default function Home() {
     handleStatusChange(draggableId, newStatus);
   };
 
+  // Butonun tıklama fonksiyonu
   const handleAddTask = () => {
     setShowTaskAddModal(true);
   };
 
   const handleCloseTaskAddModal = () => {
     setShowTaskAddModal(false);
-    fetchTasks();
+    fetchTasks(); // Yeni görev eklendiyse listeyi güncelle
   };
 
   return (
@@ -164,17 +175,19 @@ export default function Home() {
         </div>
       </DragDropContext>
 
+      {/* Modal Görev Detayı */}
       {selectedTaskId && (
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <button className="close-button" onClick={closeModal}>
               X
             </button>
-            <TaskDetail id={selectedTaskId} onClose={closeModal} onDelete={fetchTasks} />
+            <TaskDetail id={selectedTaskId} onClose={closeModal} />
           </div>
         </div>
       )}
 
+      {/* Modal Görev Ekle */}
       {showTaskAddModal && (
         <div className="modal-overlay" onClick={handleCloseTaskAddModal}>
           <div className="modal-content" onClick={e => e.stopPropagation()}>
